@@ -2,6 +2,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
 import FilesTab from './FilesTab';
+import FilesErrorsTab from './FilesErrorsTab';
 
 function OptionsTabs() {
   return (
@@ -15,7 +16,7 @@ function OptionsTabs() {
         <FilesTab />
       </Tab>
       <Tab eventKey="errors" title="Errors Report">
-        Errors report
+        <FilesErrorsTab />
       </Tab>
     </Tabs>
   );
