@@ -1,36 +1,56 @@
+import { useEffect, useMemo } from 'react';
 import Table from 'react-bootstrap/Table';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { getAsyncFilesData } from '../store/slice/filesData/thunk';
+import FilesSpinner from './FilesSpinner';
 
 function FilesTab() {
+  const dispatch = useDispatch();
+  const { isLoading, successData, errorsData } = useSelector(state => state.filesData);
+  const transformedData = useMemo(() => {
+    return successData.flatMap(item =>
+      item.lines.map(line => ({
+        file: item.file,
+          ...line,
+        }))
+      );
+  }, [successData])
+
+
+  useEffect(() => {
+    dispatch(getAsyncFilesData());
+  }, []);
+  
+
   return (
-    <Table striped bordered hover>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Username</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td colSpan={2}>Larry the Bird</td>
-          <td>@twitter</td>
-        </tr>
-      </tbody>
-    </Table>
+    <div>
+      {isLoading && (
+        <FilesSpinner />
+      )}
+      {!isLoading && successData.length > 0 && (
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>File Name</th>
+            <th>Text</th>
+            <th>Number</th>
+            <th>Hex</th>
+          </tr>
+        </thead>
+        <tbody>
+          {transformedData.map((row, index) => (
+            <tr key={index}>
+              <td>{row.file}</td>
+              <td>{row.text}</td>
+              <td>{row.number}</td>
+              <td>{row.hex}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+      )}
+    </div>
   );
 }
 
