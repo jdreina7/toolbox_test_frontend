@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { getAsyncFilesData } from '../store/slice/filesData/thunk';
 import FilesSpinner from './FilesSpinner';
-
-import ErrorDataTable from './ErrorDataTable';
 import SuccessDataTable from './SuccessDataTable';
 
 
